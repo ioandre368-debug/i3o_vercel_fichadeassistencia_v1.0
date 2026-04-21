@@ -1,123 +1,65 @@
-body { 
-    font-family: 'Times New Roman', Times, serif; 
-    background: #f0f2f5; 
-    padding: 20px; 
-    color: #333; 
+:root { --blue: #0055a5; --bg: #f4f7f9; --radius: 20px; }
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body { background: var(--bg); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 10px; margin: 0; }
+
+.app-container { max-width: 800px; margin: auto; padding-bottom: 40px; }
+
+.glass-card { background: white; padding: 20px; border-radius: var(--radius); box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 15px; border: 1px solid #eee; }
+
+.header-top { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+.app-logo { height: 40px; }
+.header-title h1 { margin: 0; color: var(--blue); font-size: 1rem; }
+.header-title p { margin: 0; font-size: 0.7rem; color: #888; }
+
+/* Grid responsiva: 1 coluna no telemóvel, 2 no PC */
+.input-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+@media (min-width: 600px) { .input-grid { grid-template-columns: 1fr 1fr; } }
+
+.input-grid-inner { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; }
+
+.input-group { display: flex; flex-direction: column; }
+.input-group label { font-size: 0.65rem; font-weight: bold; color: #999; margin-bottom: 4px; margin-left: 4px; }
+
+input, select, textarea { 
+    border: 2px solid #f0f0f0; 
+    border-radius: 12px; 
+    padding: 12px; 
+    font-size: 16px; /* Evita zoom automático no iOS */
+    background: #fafafa; 
+    width: 100%;
 }
 
-.container { 
-    max-width: 900px; 
-    background: white; 
-    padding: 40px; 
-    margin: auto; 
-    border-radius: 8px; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-}
+input:focus { border-color: var(--blue); outline: none; background: #fff; }
+.input-destaque { font-weight: bold; color: var(--blue); border: 2px solid #e0e6ed; }
 
-/* Títulos */
-.dados-cliente h1 { 
-    color: #0055a5; 
-    font-size: 2em; 
-    margin: 0 0 20px 0; 
-}
+.contact-row { display: grid; grid-template-columns: 1fr; gap: 12px; background: #f9f9f9; padding: 15px; border-radius: 18px; }
+@media (min-width: 600px) { .contact-row { grid-template-columns: 1fr 1fr; } }
 
-.titulo-seccao { 
-    color: #0055a5; 
-    font-size: 1.5em; 
-    border-bottom: 3px solid #0055a5; 
-    padding-bottom: 8px; 
-    margin: 40px 0 20px 0; 
-}
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.unit-group { display: flex; align-items: center; background: #fff; border-radius: 12px; border: 2px solid #f0f0f0; padding-right: 12px; }
+.unit-group input { border: none; flex: 1; }
+.unit-group span { font-weight: bold; color: #ccc; font-size: 0.8rem; }
 
-/* Inputs e Textareas - O segredo do tamanho está aqui */
-input[type="text"], 
-select, 
-textarea { 
+/* Assinaturas empilhadas no telemóvel */
+.signature-container { display: grid; grid-template-columns: 1fr; gap: 15px; }
+@media (min-width: 600px) { .signature-container { grid-template-columns: 1fr 1fr; } }
+
+canvas { border: 1px dashed #ddd; border-radius: 14px; width: 100%; height: 150px; background: #fff; touch-action: none; }
+
+.btn-submit { 
     width: 100%; 
-    padding: 12px 15px; /* Aumentado o espaço interno */
-    margin: 8px 0; 
-    border: 1px solid #ccc; 
-    border-radius: 6px; 
-    font-size: 1.1em; /* Fonte maior para facilitar a leitura */
-    box-sizing: border-box; /* Garante que o padding não quebre a largura */
-    font-family: inherit;
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-/* Efeito ao clicar no campo */
-input:focus, textarea:focus, select:focus {
-    border-color: #0055a5;
-    box-shadow: 0 0 8px rgba(0, 85, 165, 0.2);
-    outline: none;
-}
-
-/* Grid de Equipamento - 2 colunas largas */
-.grid-equip { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    gap: 20px; 
-}
-
-/* Avaria com destaque especial */
-.avaria-input { 
-    border: 2px solid #333; 
-    font-weight: bold; 
-    background-color: #fff;
-    min-height: 120px; /* Garante que o espaço seja grande visualmente */
-}
-
-/* Linha de Mão de Obra e Deslocação */
-.unidades-row { 
-    display: flex; 
-    gap: 40px; 
-    background: #f8f9fa; 
     padding: 20px; 
-    border-radius: 8px; 
-    margin: 20px 0; 
-    align-items: center;
-}
-
-.unidades-row p { margin: 0; font-weight: bold; }
-.unidades-row input { width: 100px; text-align: center; }
-
-/* Assinaturas */
-.assinaturas-grid { 
-    display: flex; 
-    gap: 30px; 
-    margin-top: 40px; 
-    justify-content: space-between; 
-}
-
-.canvas-item { text-align: center; flex: 1; }
-canvas { 
-    border: 1px solid #999; 
-    background: #fff; 
-    border-radius: 6px; 
-    width: 100%; /* Adapta-se ao ecrã */
-    max-width: 400px;
-    height: 150px;
-}
-
-.btn-limpar { 
-    background: #e74c3c; 
-    color: white; 
+    border-radius: var(--radius); 
     border: none; 
-    padding: 8px 20px; 
-    border-radius: 4px; 
-    cursor: pointer; 
-    margin-top: 10px; 
-}
-
-/* Botão Gerar PDF */
-.btn-gerar { 
-    width: 100%; 
-    padding: 22px; 
-    background: #0055a5; 
+    background: var(--blue); 
     color: white; 
-    border: none; 
-    font-size: 1.5em; 
-    cursor: pointer; 
-    margin-top: 40px; 
+    font-size: 1.1rem; 
     font-weight: bold; 
-    border-radius: 8px; 
+    margin-top: 10px;
+    cursor: pointer;
 }
+
+.mt-15 { margin-top: 15px; }
+.full-width { grid-column: 1 / -1; }
