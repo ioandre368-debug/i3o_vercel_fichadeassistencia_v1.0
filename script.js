@@ -1,156 +1,163 @@
-// Preenche automaticamente com a data e hora atual no formato europeu
-function configurarDataHoraAtual() {
+// Preenchimento automático da data/hora (24h)
+function autoDataHora() {
     const agora = new Date();
     const dia = String(agora.getDate()).padStart(2, '0');
     const mes = String(agora.getMonth() + 1).padStart(2, '0');
-    const ano = agora.getFullYear();
-    const hora = String(agora.getHours()).padStart(2, '0');
-    const min = String(agora.getMinutes()).padStart(2, '0');
-
-    document.getElementById('dataManual').value = `${dia}/${mes}/${ano}`;
-    document.getElementById('horaManual').value = `${hora}:${min}`;
+    const horas = String(agora.getHours()).padStart(2, '0');
+    const minutos = String(agora.getMinutes()).padStart(2, '0');
+    document.getElementById('dataManual').value = `${dia}/${mes}/${agora.getFullYear()}`;
+    document.getElementById('horaManual').value = `${horas}:${minutos}`;
 }
-configurarDataHoraAtual();
+autoDataHora();
 
-// Inicialização dos Canvas (Igual ao anterior)
-function initCanvas(id) {
+// Setup das Assinaturas
+function setupCanvas(id) {
     const canvas = document.getElementById(id);
-    if(!canvas) return;
     const ctx = canvas.getContext('2d');
-    let desenhando = false;
+    let drawing = false;
     ctx.lineWidth = 2; ctx.strokeStyle = "#000";
 
     const getPos = (e) => {
         const rect = canvas.getBoundingClientRect();
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-        return { x: clientX - rect.left, y: clientY - rect.top };
+        const cx = e.touches ? e.touches[0].clientX : e.clientX;
+        const cy = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: cx - rect.left, y: cy - rect.top };
     };
 
-    const start = (e) => { desenhando = true; ctx.beginPath(); const p = getPos(e); ctx.moveTo(p.x, p.y); if(e.touches) e.preventDefault(); };
-    const move = (e) => { if (!desenhando) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); if(e.touches) e.preventDefault(); };
-    const stop = () => { desenhando = false; };
+    const start = (e) => { drawing = true; ctx.beginPath(); const p = getPos(e); ctx.moveTo(p.x, p.y); if(e.touches) e.preventDefault(); };
+    const move = (e) => { if(!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); if(e.touches) e.preventDefault(); };
+    const end = () => drawing = false;
 
     canvas.addEventListener('mousedown', start);
     canvas.addEventListener('mousemove', move);
-    window.addEventListener('mouseup', stop);
+    window.addEventListener('mouseup', end);
     canvas.addEventListener('touchstart', start, {passive: false});
     canvas.addEventListener('touchmove', move, {passive: false});
-    canvas.addEventListener('touchend', stop);
+    canvas.addEventListener('touchend', end);
 }
-
-initCanvas('assinaturaTecnico');
-initCanvas('assinaturaCliente');
+setupCanvas('assinaturaTecnico');
+setupCanvas('assinaturaCliente');
 
 function limparCanvas(id) {
     const c = document.getElementById(id);
     c.getContext('2d').clearRect(0, 0, c.width, c.height);
 }
 
-// GERAÇÃO DO PDF
+// GERAÇÃO DO PDF SEM RETÂNGULOS (APENAS LINHAS)
 function gerarPDF() {
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF('p', 'mm', 'a4');
-    const fonte = "times";
+    const f = "times";
 
-    // 1. Logo
-    const imgLogo = document.getElementById('logoEmpresa');
-    if (imgLogo) {
-        pdf.addImage(imgLogo, 'PNG', 15, 10, 41, 43);
-    }
+    // 1. CABEÇALHO
+    const img = document.getElementById('logoEmpresa');
+    if (img) pdf.addImage(img, 'PNG', 10, 10, 35, 35);
 
-    // 2. Título
-    pdf.setFont(fonte, "bold");
-    pdf.setFontSize(14);
+    // Título Destacado com Linha Inferior
+    pdf.setFont(f, "bold");
+    pdf.setFontSize(18);
     pdf.setTextColor(0, 85, 165);
-    pdf.text("RELATÓRIO DE ASSISTÊNCIA TÉCNICA", 65, 20);
+    pdf.text("RELATÓRIO DE ASSISTÊNCIA TÉCNICA", 50, 20);
+    
+    pdf.setDrawColor(0, 85, 165);
+    pdf.setLineWidth(1);
+    pdf.line(50, 22, 200, 22); // Linha grossa de destaque por baixo do título
 
-    // 3. Dados Cliente
+    // Dados do Cliente (Sem quadrado)
+    pdf.setTextColor(0);
+    pdf.setFontSize(10);
+    pdf.setFont(f, "normal");
+    pdf.text(`Nº Cliente: ${document.getElementById('numCliente').value}`, 50, 28);
+    
+    pdf.setFont(f, "bold");
     pdf.setFontSize(11);
-    pdf.setTextColor(0, 0, 0);
-    let xCli = 65;
-    let yCli = 30;
+    pdf.text(`CLIENTE: ${document.getElementById('nomeCliente').value.toUpperCase()}`, 50, 33);
+    
+    pdf.setFont(f, "normal");
+    pdf.setFontSize(10);
+    pdf.text(`Morada: ${document.getElementById('moradaCliente').value}`, 50, 38);
+    pdf.text(`Contacto: ${document.getElementById('contactoCliente').value} | Tel: ${document.getElementById('telefoneCliente').value}`, 50, 43);
+    pdf.text(`Data: ${document.getElementById('dataManual').value} | Hora: ${document.getElementById('horaManual').value}`, 150, 43);
 
-    pdf.setFont(fonte, "normal");
-    pdf.text(`Nº cliente: ${document.getElementById('numCliente').value}`, xCli, yCli);
-    yCli += 7;
-    pdf.setFont(fonte, "bold");
-    pdf.text((document.getElementById('nomeCliente').value || "").toUpperCase(), xCli, yCli);
-    yCli += 6;
-    pdf.setFont(fonte, "normal");
-    pdf.text(document.getElementById('moradaCliente').value, xCli, yCli);
-    yCli += 5;
-    pdf.text(`${document.getElementById('localidadeCliente').value} | CP: ${document.getElementById('codigoPostal').value}`, xCli, yCli);
+    // 2. EQUIPAMENTO INTERVENCIONADO
+    let y = 55;
+    pdf.setDrawColor(200); // Linha cinza clara para separação
+    pdf.setLineWidth(0.3);
+    pdf.line(10, y, 200, y); // Linha de separação
 
-    // 4. Contacto, Tel e Data (Lado a Lado)
-    let yBase = 58;
-    pdf.setFontSize(11);
-    pdf.text(`Contacto: ${document.getElementById('contactoCliente').value}`, 15, yBase);
-    pdf.text(`Telemóvel: ${document.getElementById('telefoneCliente').value}`, 15, yBase + 6);
-
-    // Pega nos campos manuais
-    const dManual = document.getElementById('dataManual').value;
-    const hManual = document.getElementById('horaManual').value;
-    pdf.text(`Data: ${dManual} ${hManual}`, 195, yBase, { align: "right" });
-
-    // 5. Equipamento
-    let currentY = 78;
-    pdf.setFont(fonte, "bold");
+    y += 8;
+    pdf.setFont(f, "bold");
     pdf.setFontSize(12);
-    pdf.text("Equipamento intervencionado", 15, currentY);
-    currentY += 7;
-    pdf.setFont(fonte, "normal");
+    pdf.setTextColor(0, 85, 165);
+    pdf.text("EQUIPAMENTO INTERVENCIONADO", 10, y);
+    
+    y += 7;
+    pdf.setTextColor(0);
     pdf.setFontSize(11);
-    pdf.text(`Equipamento: ${document.getElementById('equipamento').value}`, 15, currentY);
-    pdf.text(`Marca: ${document.getElementById('marca').value}`, 110, currentY);
-    currentY += 6;
-    pdf.text(`Modelo: ${document.getElementById('modelo').value}`, 15, currentY);
-    pdf.text(`N° Série: ${document.getElementById('nSerie').value}`, 110, currentY);
-    currentY += 6;
-    pdf.text(`Avaria: ${document.getElementById('avaria').value}`, 15, currentY);
+    pdf.setFont(f, "normal");
+    pdf.text(`Equipamento: ${document.getElementById('equipamento').value}`, 10, y);
+    pdf.text(`Marca: ${document.getElementById('marca').value}`, 110, y);
+    
+    y += 6;
+    pdf.text(`Modelo: ${document.getElementById('modelo').value}`, 10, y);
+    pdf.text(`Nº Série: ${document.getElementById('nSerie').value}`, 110, y);
+    
+    // Avaria com Destaque
+    y += 10;
+    pdf.setFont(f, "bold");
+    pdf.text("AVARIA:", 10, y);
+    const avariaLines = pdf.splitTextToSize(document.getElementById('avaria').value, 185);
+    pdf.setFont(f, "normal");
+    pdf.text(avariaLines, 10, y + 6);
 
-    // 6. Peças
-    currentY += 12;
-    pdf.setFont(fonte, "bold");
-    pdf.text("Peças", 15, currentY);
-    currentY += 6;
-    pdf.setFont(fonte, "normal");
-    const pecasText = document.getElementById('pecas').value || "";
-    const pecas = pdf.splitTextToSize(pecasText, 180);
-    pdf.text(pecas, 15, currentY);
+    // 3. INTERVENÇÃO TÉCNICA
+    y += (avariaLines.length * 5) + 12;
+    pdf.setDrawColor(200);
+    pdf.line(10, y, 200, y); // Linha de separação
 
-    // 7. Intervenção Técnica (Com h e Kms)
-    currentY += (pecas.length * 5) + 10;
-    pdf.setFont(fonte, "bold");
-    pdf.text("Intervenção Técnica", 15, currentY);
-    currentY += 7;
-    pdf.setFont(fonte, "normal");
-    let mo = document.getElementById('maoObra').value;
-    pdf.text(`Mão de obra: ${mo ? mo + ' h' : ''}`, 15, currentY);
-    currentY += 6;
-    let ds = document.getElementById('deslocacao').value;
-    pdf.text(`Deslocação: ${ds ? ds + ' Kms' : ''}`, 15, currentY);
+    y += 8;
+    pdf.setFont(f, "bold");
+    pdf.setTextColor(0, 85, 165);
+    pdf.text("INTERVENÇÃO TÉCNICA", 10, y);
+    
+    y += 8;
+    pdf.setTextColor(0);
+    pdf.text("PEÇAS:", 10, y);
+    pdf.setFont(f, "normal");
+    const pecas = pdf.splitTextToSize(document.getElementById('pecas').value, 185);
+    pdf.text(pecas, 10, y + 6);
+    
+    y += (pecas.length * 5) + 12;
+    pdf.setFont(f, "bold");
+    pdf.text(`MÃO DE OBRA: ${document.getElementById('maoObra').value} h`, 10, y);
+    pdf.text(`DESLOCAÇÃO: ${document.getElementById('deslocacao').value} Kms`, 110, y);
 
-    // 8. Relatório
-    currentY += 12;
-    pdf.setFont(fonte, "bold");
-    pdf.text("Relatório:", 15, currentY);
-    currentY += 6;
-    pdf.setFont(fonte, "normal");
-    const relText = document.getElementById('relatorio').value || "";
-    const rel = pdf.splitTextToSize(relText, 180);
-    pdf.text(rel, 15, currentY);
+    y += 10;
+    pdf.text("RELATÓRIO:", 10, y);
+    pdf.setFont(f, "normal");
+    const rel = pdf.splitTextToSize(document.getElementById('relatorio').value, 185);
+    pdf.text(rel, 10, y + 6);
 
-    // 9. Assinaturas
-    const footerY = 270;
-    pdf.text(`Técnico responsável: ${document.getElementById('nomeTecnico').value}`, 15, footerY - 15);
-    pdf.line(15, footerY, 80, footerY);
-    pdf.line(125, footerY, 190, footerY);
-    pdf.text("Técnico", 15, footerY + 5); 
-    pdf.text("Cliente", 125, footerY + 5);
+    // 4. ASSINATURAS (No fundo da página)
+    const fy = 270;
+    pdf.setDrawColor(200);
+    pdf.line(10, fy - 25, 200, fy - 25); // Linha antes das assinaturas
 
-    pdf.addImage(document.getElementById('assinaturaTecnico').toDataURL(), 'PNG', 20, footerY - 18, 50, 15);
-    pdf.addImage(document.getElementById('assinaturaCliente').toDataURL(), 'PNG', 130, footerY - 18, 50, 15);
+    pdf.setFont(f, "bold");
+    pdf.text(`Técnico Responsável: ${document.getElementById('nomeTecnico').value}`, 10, fy - 18);
+    
+    pdf.setDrawColor(0);
+    pdf.setLineWidth(0.5);
+    pdf.line(10, fy, 80, fy);
+    pdf.line(125, fy, 195, fy);
+    
+    pdf.setFontSize(10);
+    pdf.text("Assinatura Técnico", 10, fy + 5);
+    pdf.text("Assinatura Cliente", 125, fy + 5);
+
+    // Imagens das assinaturas
+    pdf.addImage(document.getElementById('assinaturaTecnico').toDataURL(), 'PNG', 15, fy - 14, 60, 12);
+    pdf.addImage(document.getElementById('assinaturaCliente').toDataURL(), 'PNG', 130, fy - 14, 60, 12);
 
     pdf.save(`RAT_${document.getElementById('numCliente').value || 'OS'}.pdf`);
 }
