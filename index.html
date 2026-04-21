@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Assistência Técnica - I3O</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <header class="header-cabecalho">
+        <div class="logo-left">
+            <img src="logo_i3o.png" id="logoEmpresa" alt="I3O Logo" class="logo" style="width: 155px; height: 165px; object-fit: contain;">
+        </div>
+        <div class="dados-direita">
+            <h1>RELATÓRIO DE ASSISTÊNCIA TÉCNICA</h1>
+            <p><strong>Nº cliente:</strong> <input type="text" id="numCliente"></p>
+            <p><strong>Nome Cliente:</strong> <input type="text" id="nomeCliente"></p>
+            <p><strong>Morada:</strong> <input type="text" id="moradaCliente"></p>
+            <p><strong>Localidade:</strong> <input type="text" id="localidadeCliente"> | <strong>Código de Postal:</strong> <input type="text" id="codigoPostal"></p>
+            <p><strong>Contacto:</strong> <input type="text" id="contactoCliente"></p>
+            <p><strong>Telemóvel:</strong> <input type="text" id="telefoneCliente"></p>
+            
+            <p>
+                <strong>Data:</strong> <input type="text" id="dataManual" placeholder="DD/MM/AAAA" style="width: 100px;"> 
+                <strong>Hora:</strong> <input type="text" id="horaManual" placeholder="22:00" style="width: 60px;">
+            </p>
+        </div>
+    </header>
+
+    <section class="card">
+        <h2>Equipamento intervencionado</h2>
+        <table>
+            <tr>
+                <td><strong>Equipamento:</strong><input type="text" id="equipamento"></td>
+                <td><strong>Marca:</strong><input type="text" id="marca"></td>
+            </tr>
+            <tr>
+                <td><strong>Modelo:</strong><input type="text" id="modelo"></td>
+                <td><strong>Nº Série:</strong><input type="text" id="nSerie"></td>
+            </tr>
+            <tr>
+                <td colspan="2"><strong>Avaria:</strong><input type="text" id="avaria"></td>
+            </tr>
+        </table>
+    </section>
+
+    <section class="card">
+        <h2>Peças</h2>
+        <textarea id="pecas" rows="3"></textarea>
+    </section>
+
+    <section class="card">
+        <h2>Intervenção Técnica</h2>
+        <table>
+            <tr>
+                <td><strong>Mão de obra:</strong><input type="text" id="maoObra" placeholder="Ex: 4"></td>
+                <td><strong>Deslocação:</strong><input type="text" id="deslocacao" placeholder="Ex: 150"></td>
+            </tr>
+        </table>
+        <p><strong>Relatório:</strong></p>
+        <textarea id="relatorio" rows="5"></textarea>
+        
+        <p><strong>Técnico responsável:</strong>
+            <select id="nomeTecnico">
+                <option>Eurico Mota</option>
+                <option>André Silva</option>
+                <option>Carlos Gomes</option>
+            </select>
+        </p>
+    </section>
+
+    <section class="card assinaturas">
+        <div class="assinatura-box">
+            <p><strong>Assinatura Técnico</strong></p>
+            <canvas id="assinaturaTecnico" class="assinatura" width="400" height="150"></canvas>
+            <button type="button" class="btn-clear" onclick="limparCanvas('assinaturaTecnico')">Limpar</button>
+        </div>
+        <div class="assinatura-box">
+            <p><strong>Assinatura Cliente</strong></p>
+            <canvas id="assinaturaCliente" class="assinatura" width="400" height="150"></canvas>
+            <button type="button" class="btn-clear" onclick="limparCanvas('assinaturaCliente')">Limpar</button>
+        </div>
+    </section>
+
+    <button class="btn-export" onclick="gerarPDF()">GERAR RELATÓRIO PDF</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

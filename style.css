@@ -1,0 +1,55 @@
+ body { font-family: 'Segoe UI', Arial, sans-serif; background:#f4f7f6; margin:0; padding:20px; color:#333; }
+
+.container { max-width: 850px; margin: auto; }
+
+
+header.header-cabecalho {
+
+    display: flex; background: #0055a5; color: white; padding: 20px;
+
+    border-radius: 8px 8px 0 0; align-items: center;
+
+}
+
+header h1 { font-size: 18px; margin-bottom: 10px; }
+
+header input { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 5px; border-radius: 4px; }
+
+
+.card { background: white; padding: 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+
+h2 { color: #0055a5; font-size: 16px; border-bottom: 2px solid #0055a5; padding-bottom: 8px; margin-top: 0; }
+
+
+table { width: 100%; border-spacing: 10px; margin-left: -10px; }
+
+td { width: 50%; vertical-align: bottom; }
+
+
+input, textarea, select {
+
+    width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc;
+
+    border-radius: 4px; box-sizing: border-box; font-size: 14px;
+
+}
+
+
+.assinaturas { display: flex; gap: 20px; }
+
+.assinatura-box { flex: 1; text-align: center; }
+
+canvas.assinatura { border: 1px solid #0055a5; background: #fff; width: 100%; border-radius: 4px; }
+
+
+.btn-clear { background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-top: 5px; font-size: 12px; }
+
+.btn-export {
+
+    background: #27ae60; color: white; padding: 18px; width: 100%;
+
+    border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s;
+
+}
+
+.btn-export:hover { background: #219150; } 
