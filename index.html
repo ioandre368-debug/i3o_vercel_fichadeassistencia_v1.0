@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>I3O Mobile RAT</title>
+    <title>I3O - Relatório Técnico</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
@@ -22,7 +22,7 @@
         <div class="input-grid">
             <div class="input-group">
                 <label>Nº CLIENTE</label>
-                <input type="text" id="numCliente" placeholder="Ex: 2024">
+                <input type="text" id="numCliente" placeholder="Ex: 2026">
             </div>
             <div class="input-grid-inner">
                 <div class="input-group"><label>DATA</label><input type="text" id="dataInput"></div>
@@ -39,10 +39,12 @@
             <div class="input-group"><label>MORADA</label><input type="text" id="moradaCliente"></div>
             <div class="input-group"><label>LOCALIDADE</label><input type="text" id="localidadeCliente"></div>
             <div class="input-group"><label>CÓDIGO POSTAL</label><input type="text" id="codPostal" placeholder="0000-000"></div>
+        </div>
+
+        <div class="contact-row mt-15">
             <div class="input-group"><label>CONTACTO</label><input type="text" id="contactoNome"></div>
             <div class="input-group"><label>TELEMÓVEL</label><input type="tel" id="telemovel"></div>
         </div>
-        /// AQUI
     </header>
 
     <section class="glass-card">
@@ -61,7 +63,7 @@
 
     <section class="glass-card">
         <h3 class="section-title">🛠️ Intervenção</h3>
-        <label class="field-label">PEÇAS UTILIZADAS</label>
+        <label class="field-label">PEÇAS UTILIZADAS (Opcional)</label>
         <textarea id="pecas" rows="4"></textarea>
 
         <div class="stats-grid mt-15">
@@ -75,8 +77,8 @@
             </div>
         </div>
 
-        <label class="field-label mt-15">RELATÓRIO TÉCNICO</label>
-        <textarea id="relatorio" rows="5"></textarea>
+        <label class="field-label mt-15">RELATÓRIO TÉCNICO DETALHADO</label>
+        <textarea id="relatorio" rows="6"></textarea>
 
         <div class="input-group mt-15">
             <label>TÉCNICO</label>
@@ -90,18 +92,18 @@
 
     <div class="signature-container">
         <div class="glass-card sig-card">
-            <label>ASSINATURA TÉCNICO</label>
+            <label>TÉCNICO</label>
             <canvas id="padTecnico"></canvas>
-            <button onclick="limpar('padTecnico')">Limpar</button>
+            <button class="btn-clear" onclick="limpar('padTecnico')">Limpar</button>
         </div>
         <div class="glass-card sig-card">
-            <label>ASSINATURA CLIENTE</label>
+            <label>CLIENTE</label>
             <canvas id="padCliente"></canvas>
-            <button onclick="limpar('padCliente')">Limpar</button>
+            <button class="btn-clear" onclick="limpar('padCliente')">Limpar</button>
         </div>
     </div>
 
-    <button class="btn-submit" onclick="gerarPDF()">GERAR PDF</button>
+    <button class="btn-submit" onclick="gerarPDF()">GERAR PDF FINAL</button>
 </div>
 
 <script src="script.js"></script>
