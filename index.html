@@ -3,67 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relatório de Assistência Técnica - I3O</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Relatório Técnico I3O</title>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        /* CSS: DESIGN DE PREENCHIMENTO AMPLO E LIMPO */
+        body { 
+            font-family: 'Times New Roman', Times, serif; 
+            background: #f0f2f5; 
+            padding: 20px; 
+            color: #333; 
+        }
+
+        .container { 
+            max-width: 900px; 
+            background: white; 
+            padding: 40px; 
+            margin: auto; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+        }
+
+        /* Cabeçalho */
+        .header-container { 
+            display: flex; 
+            gap: 30px; 
+            margin-bottom: 30px; 
+            border-bottom: 1px solid #eee; 
+            padding-bottom: 20px;
+            align-items: center;
+        }
+
+        .logo-box img { 
+            width: 155px; 
+            height: auto; 
+            max-height: 165px;
+        }
+
+        .dados-cliente { flex: 1; }
+        .dados-cliente h1 { 
+            color: #0055a5; 
+            font-size: 1.8em; 
+            margin: 0 0 15px 0; 
+        }
+
+        /* Títulos das Secções */
+        .titulo-seccao { 
+            color: #0055a5; 
+            font-size: 1.5em; 
+            border-bottom: 3px solid #0055a5; 
+            padding-bottom: 8px; 
+            margin: 40px 0 20px 0; 
+            text-transform: uppercase;
+        }
+
+        /* Inputs e Textareas GRANDES */
+        input[type="text"], 
+        select, 
+        textarea { 
+            width: 100%; 
+            padding: 14px; 
+            margin: 8px 0; 
+            border: 1px solid #ccc; 
+            border-radius: 6px; 
+            font-size: 1.1em; 
+            box-sizing: border-box; 
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #0055a5;
+            box-shadow: 0 0 8px rgba(0, 85, 165, 0.2);
+            outline: none;
+        }
+
+        .bold-upper { 
+            text-transform: uppercase; 
+            font-weight: bold; 
+            border: 1px solid #999 !important;
+        }
+
+        /* Grids de layout */
+        .grid-2 { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px; 
+        }
+
+        /* Campo de Avaria com destaque */
+        .avaria-input { 
+            border: 2px solid #333; 
+            font-weight: bold; 
+            min-height: 120px; 
+            background: #fff;
+        }
+
+        .relatorio-input { min-height: 200px; }
+
+        /* Linha de Mão de Obra e Deslocação */
+        .unidades-row { 
+            display: flex; 
+            gap: 40px; 
+            background: #f8f9fa; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin: 20px 0; 
+            align-items: center;
+        }
+        .unidades-row input { width: 120px; text-align: center; }
+
+        /* Assinaturas */
+        .assinaturas-grid { 
+            display: flex; 
+            gap: 30px; 
+            margin-top: 40px; 
+            justify-content: space-between; 
+        }
+        .canvas-item { text-align: center; flex: 1; }
+        canvas { 
+            border: 1px solid #999; 
+            background: #fff; 
+            border-radius: 6px; 
+            width: 100%;
+            max-width: 400px;
+            height: 150px;
+            cursor: crosshair;
+        }
+
+        .btn-limpar { 
+            background: #666; 
+            color: white; 
+            border: none; 
+            padding: 8px 15px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            margin-top: 10px; 
+        }
+
+        .btn-gerar { 
+            width: 100%; 
+            padding: 22px; 
+            background: #0055a5; 
+            color: white; 
+            border: none; 
+            font-size: 1.5em; 
+            cursor: pointer; 
+            margin-top: 40px; 
+            font-weight: bold; 
+            border-radius: 8px; 
+        }
+        .btn-gerar:hover { background: #003d7a; }
+
+    </style>
 </head>
 <body>
 
 <div class="container">
-    <header class="header-cabecalho">
-        <div class="logo-left">
-            <img src="logo_i3o.png" id="logoEmpresa" alt="I3O Logo" class="logo" style="width: 155px; height: 165px; object-fit: contain;">
+    <header class="header-container">
+        <div class="logo-box">
+            <img src="logo_i3o.png" id="logoEmpresa" alt="Logo I3O">
         </div>
-        <div class="dados-direita">
+        <div class="dados-cliente">
             <h1>RELATÓRIO DE ASSISTÊNCIA TÉCNICA</h1>
-            <p><strong>Nº cliente:</strong> <input type="text" id="numCliente"></p>
-            <p><strong>Nome Cliente:</strong> <input type="text" id="nomeCliente"></p>
-            <p><strong>Morada:</strong> <input type="text" id="moradaCliente"></p>
-            <p><strong>Localidade:</strong> <input type="text" id="localidadeCliente"> | <strong>Código de Postal:</strong> <input type="text" id="codigoPostal"></p>
-            <p><strong>Contacto:</strong> <input type="text" id="contactoCliente"></p>
-            <p><strong>Telemóvel:</strong> <input type="text" id="telefoneCliente"></p>
+            <p><strong>Nº Cliente:</strong> <input type="text" id="numCliente" placeholder="Ex: 1234"></p>
+            <p><strong>Cliente:</strong> <input type="text" id="nomeCliente" class="bold-upper" placeholder="NOME DO CLIENTE"></p>
+            <p><strong>Morada:</strong> <input type="text" id="moradaCliente" placeholder="Morada completa"></p>
             
-            <p>
-                <strong>Data:</strong> <input type="text" id="dataManual" placeholder="DD/MM/AAAA" style="width: 100px;"> 
-                <strong>Hora:</strong> <input type="text" id="horaManual" placeholder="22:00" style="width: 60px;">
-            </p>
+            <div class="grid-2">
+                <p><strong>Contacto:</strong> <input type="text" id="contactoCliente" placeholder="Nome do contacto"></p>
+                <p><strong>Telemóvel:</strong> <input type="text" id="telefoneCliente" placeholder="912..."></p>
+            </div>
+            
+            <div class="grid-2">
+                <p><strong>Data:</strong> <input type="text" id="dataManual"></p> 
+                <p><strong>Hora:</strong> <input type="text" id="horaManual"></p>
+            </div>
         </div>
     </header>
 
-    <section class="card">
-        <h2>Equipamento intervencionado</h2>
-        <table>
-            <tr>
-                <td><strong>Equipamento:</strong><input type="text" id="equipamento"></td>
-                <td><strong>Marca:</strong><input type="text" id="marca"></td>
-            </tr>
-            <tr>
-                <td><strong>Modelo:</strong><input type="text" id="modelo"></td>
-                <td><strong>Nº Série:</strong><input type="text" id="nSerie"></td>
-            </tr>
-            <tr>
-                <td colspan="2"><strong>Avaria:</strong><input type="text" id="avaria"></td>
-            </tr>
-        </table>
+    <section>
+        <h2 class="titulo-seccao">Equipamento Intervencionado</h2>
+        <div class="grid-2">
+            <p><strong>Equipamento:</strong> <input type="text" id="equipamento"></p>
+            <p><strong>Marca:</strong> <input type="text" id="marca"></p>
+            <p><strong>Modelo:</strong> <input type="text" id="modelo"></p>
+            <p><strong>Nº Série:</strong> <input type="text" id="nSerie"></p>
+        </div>
+        <p><strong>AVARIA (DESCRIÇÃO):</strong></p>
+        <textarea id="avaria" class="avaria-input" placeholder="Descreva aqui o problema..."></textarea>
     </section>
 
-    <section class="card">
-        <h2>Peças</h2>
-        <textarea id="pecas" rows="3"></textarea>
-    </section>
-
-    <section class="card">
-        <h2>Intervenção Técnica</h2>
-        <table>
-            <tr>
-                <td><strong>Mão de obra:</strong><input type="text" id="maoObra" placeholder="Ex: 4"></td>
-                <td><strong>Deslocação:</strong><input type="text" id="deslocacao" placeholder="Ex: 150"></td>
-            </tr>
-        </table>
-        <p><strong>Relatório:</strong></p>
-        <textarea id="relatorio" rows="5"></textarea>
+    <section>
+        <h2 class="titulo-seccao">Intervenção Técnica</h2>
         
-        <p><strong>Técnico responsável:</strong>
+        <p><strong>PEÇAS UTILIZADAS:</strong></p>
+        <textarea id="pecas" rows="4" placeholder="Lista de peças e referências..."></textarea>
+
+        <div class="unidades-row">
+            <p>MÃO DE OBRA: <input type="text" id="maoObra"> <strong>h</strong></p>
+            <p>DESLOCAÇÃO: <input type="text" id="deslocacao"> <strong>Kms</strong></p>
+        </div>
+
+        <p><strong>RELATÓRIO DA INTERVENÇÃO:</strong></p>
+        <textarea id="relatorio" class="relatorio-input" placeholder="Detalhes do serviço efetuado..."></textarea>
+        
+        <p><strong>Técnico Responsável:</strong>
             <select id="nomeTecnico">
                 <option>Eurico Mota</option>
                 <option>André Silva</option>
@@ -72,22 +218,196 @@
         </p>
     </section>
 
-    <section class="card assinaturas">
-        <div class="assinatura-box">
+    <section class="assinaturas-grid">
+        <div class="canvas-item">
             <p><strong>Assinatura Técnico</strong></p>
-            <canvas id="assinaturaTecnico" class="assinatura" width="400" height="150"></canvas>
-            <button type="button" class="btn-clear" onclick="limparCanvas('assinaturaTecnico')">Limpar</button>
+            <canvas id="assinaturaTecnico"></canvas>
+            <br>
+            <button class="btn-limpar" onclick="limparCanvas('assinaturaTecnico')">Limpar</button>
         </div>
-        <div class="assinatura-box">
+        <div class="canvas-item">
             <p><strong>Assinatura Cliente</strong></p>
-            <canvas id="assinaturaCliente" class="assinatura" width="400" height="150"></canvas>
-            <button type="button" class="btn-clear" onclick="limparCanvas('assinaturaCliente')">Limpar</button>
+            <canvas id="assinaturaCliente"></canvas>
+            <br>
+            <button class="btn-limpar" onclick="limparCanvas('assinaturaCliente')">Limpar</button>
         </div>
     </section>
 
-    <button class="btn-export" onclick="gerarPDF()">GERAR RELATÓRIO PDF</button>
+    <button class="btn-gerar" onclick="gerarPDF()">GERAR PDF PROFISSIONAL</button>
 </div>
 
-<script src="script.js"></script>
+<script>
+    // --- LÓGICA DE DATA E HORA ---
+    function iniciarData() {
+        const agora = new Date();
+        const dia = String(agora.getDate()).padStart(2, '0');
+        const mes = String(agora.getMonth() + 1).padStart(2, '0');
+        const horas = String(agora.getHours()).padStart(2, '0');
+        const minutos = String(agora.getMinutes()).padStart(2, '0');
+        document.getElementById('dataManual').value = `${dia}/${mes}/${agora.getFullYear()}`;
+        document.getElementById('horaManual').value = `${horas}:${minutos}`;
+    }
+    iniciarData();
+
+    // --- LÓGICA DE ASSINATURAS (CANVAS) ---
+    function vincularCanvas(id) {
+        const canvas = document.getElementById(id);
+        const ctx = canvas.getContext('2d');
+        let desenhando = false;
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#000";
+
+        const obterPosicao = (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+            const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+            return { x, y };
+        };
+
+        const iniciar = (e) => { 
+            desenhando = true; 
+            ctx.beginPath(); 
+            const p = obterPosicao(e); 
+            ctx.moveTo(p.x, p.y); 
+            if(e.touches) e.preventDefault(); 
+        };
+        const mover = (e) => { 
+            if(!desenhando) return; 
+            const p = obterPosicao(e); 
+            ctx.lineTo(p.x, p.y); 
+            ctx.stroke(); 
+            if(e.touches) e.preventDefault(); 
+        };
+        const parar = () => desenhando = false;
+
+        canvas.addEventListener('mousedown', iniciar);
+        canvas.addEventListener('mousemove', mover);
+        window.addEventListener('mouseup', parar);
+        canvas.addEventListener('touchstart', iniciar, {passive: false});
+        canvas.addEventListener('touchmove', mover, {passive: false});
+        canvas.addEventListener('touchend', parar);
+    }
+    vincularCanvas('assinaturaTecnico');
+    vincularCanvas('assinaturaCliente');
+
+    function limparCanvas(id) {
+        const c = document.getElementById(id);
+        c.getContext('2d').clearRect(0, 0, c.width, c.height);
+    }
+
+    // --- GERAÇÃO DO PDF ---
+    function gerarPDF() {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const f = "times";
+
+        // Logo
+        const img = document.getElementById('logoEmpresa');
+        try {
+            pdf.addImage(img, 'PNG', 10, 10, 35, 35);
+        } catch(e) { console.log("Logo não encontrada"); }
+
+        // Título e Linha de Destaque
+        pdf.setFont(f, "bold");
+        pdf.setFontSize(18);
+        pdf.setTextColor(0, 85, 165);
+        pdf.text("RELATÓRIO DE ASSISTÊNCIA TÉCNICA", 50, 22);
+        pdf.setDrawColor(0, 85, 165);
+        pdf.setLineWidth(1);
+        pdf.line(50, 24, 200, 24);
+
+        // Dados Cliente
+        pdf.setTextColor(0);
+        pdf.setFontSize(10);
+        pdf.setFont(f, "normal");
+        pdf.text(`Nº Cliente: ${document.getElementById('numCliente').value}`, 50, 30);
+        pdf.setFont(f, "bold");
+        pdf.setFontSize(11);
+        pdf.text(`CLIENTE: ${document.getElementById('nomeCliente').value.toUpperCase()}`, 50, 35);
+        pdf.setFont(f, "normal");
+        pdf.setFontSize(10);
+        pdf.text(`Morada: ${document.getElementById('moradaCliente').value}`, 50, 40);
+        pdf.text(`Contacto: ${document.getElementById('contactoCliente').value} | Tel: ${document.getElementById('telefoneCliente').value}`, 50, 45);
+        pdf.text(`Data: ${document.getElementById('dataManual').value} | Hora: ${document.getElementById('horaManual').value}`, 155, 45);
+
+        // Linha de Separação
+        let y = 55;
+        pdf.setDrawColor(200);
+        pdf.setLineWidth(0.2);
+        pdf.line(10, y, 200, y);
+
+        // Equipamento
+        y += 8;
+        pdf.setFont(f, "bold");
+        pdf.setFontSize(12);
+        pdf.setTextColor(0, 85, 165);
+        pdf.text("EQUIPAMENTO INTERVENCIONADO", 10, y);
+        
+        y += 7;
+        pdf.setTextColor(0);
+        pdf.setFontSize(11);
+        pdf.setFont(f, "normal");
+        pdf.text(`Equipamento: ${document.getElementById('equipamento').value}`, 10, y);
+        pdf.text(`Marca: ${document.getElementById('marca').value}`, 110, y);
+        y += 6;
+        pdf.text(`Modelo: ${document.getElementById('modelo').value}`, 10, y);
+        pdf.text(`Nº Série: ${document.getElementById('nSerie').value}`, 110, y);
+        
+        y += 10;
+        pdf.setFont(f, "bold");
+        pdf.text("AVARIA:", 10, y);
+        const avariaLines = pdf.splitTextToSize(document.getElementById('avaria').value, 185);
+        pdf.setFont(f, "normal");
+        pdf.text(avariaLines, 10, y + 6);
+
+        // Intervenção
+        y += (avariaLines.length * 5) + 12;
+        pdf.setDrawColor(200);
+        pdf.line(10, y, 200, y);
+
+        y += 8;
+        pdf.setFont(f, "bold");
+        pdf.setTextColor(0, 85, 165);
+        pdf.text("INTERVENÇÃO TÉCNICA", 10, y);
+        
+        y += 8;
+        pdf.setTextColor(0);
+        pdf.text("PEÇAS:", 10, y);
+        pdf.setFont(f, "normal");
+        const pecas = pdf.splitTextToSize(document.getElementById('pecas').value, 185);
+        pdf.text(pecas, 10, y + 6);
+        
+        y += (pecas.length * 5) + 12;
+        pdf.setFont(f, "bold");
+        pdf.text(`MÃO DE OBRA: ${document.getElementById('maoObra').value} h`, 10, y);
+        pdf.text(`DESLOCAÇÃO: ${document.getElementById('deslocacao').value} Kms`, 110, y);
+
+        y += 10;
+        pdf.text("RELATÓRIO:", 10, y);
+        pdf.setFont(f, "normal");
+        const rel = pdf.splitTextToSize(document.getElementById('relatorio').value, 185);
+        pdf.text(rel, 10, y + 6);
+
+        // Assinaturas
+        const fy = 270;
+        pdf.setDrawColor(200);
+        pdf.line(10, fy - 25, 200, fy - 25);
+        pdf.setFont(f, "bold");
+        pdf.text(`Técnico Responsável: ${document.getElementById('nomeTecnico').value}`, 10, fy - 18);
+        pdf.setDrawColor(0);
+        pdf.line(10, fy, 80, fy);
+        pdf.line(125, fy, 195, fy);
+        pdf.setFontSize(10);
+        pdf.text("Assinatura Técnico", 10, fy + 5);
+        pdf.text("Assinatura Cliente", 125, fy + 5);
+
+        // Imagens das assinaturas
+        pdf.addImage(document.getElementById('assinaturaTecnico').toDataURL(), 'PNG', 15, fy - 14, 60, 12);
+        pdf.addImage(document.getElementById('assinaturaCliente').toDataURL(), 'PNG', 130, fy - 14, 60, 12);
+
+        pdf.save(`Relatorio_${document.getElementById('numCliente').value || 'I3O'}.pdf`);
+    }
+</script>
+
 </body>
 </html>
