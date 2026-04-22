@@ -14,7 +14,7 @@
             <img src="logo_i3o.png" alt="Logo" class="app-logo" id="logoImg">
             <div class="header-title">
                 <h1>SISTEMA I3O</h1>
-                <p>Relatório de Assistência</p>
+                <p>Relatório de Assistência Técnica</p>
             </div>
         </div>
         <div class="input-grid">
@@ -28,17 +28,13 @@
             </div>
         </div>
         <div class="input-group full-width mt-15">
-            <label>NOME DO CLIENTE</label>
+            <label>NOME DO CLIENTE (EMPRESA / ENTIDADE)</label>
             <input type="text" id="nomeCliente" class="input-destaque">
         </div>
         <div class="input-grid mt-15">
             <div class="input-group"><label>MORADA</label><input type="text" id="moradaCliente"></div>
             <div class="input-group"><label>LOCALIDADE</label><input type="text" id="localidadeCliente"></div>
             <div class="input-group"><label>CÓDIGO POSTAL</label><input type="text" id="codPostal" placeholder="0000-000"></div>
-        </div>
-        <div class="contact-row mt-15">
-            <div class="input-group"><label>CONTACTO</label><input type="text" id="contactoNome"></div>
-            <div class="input-group"><label>TELEMÓVEL</label><input type="tel" id="telemovel"></div>
         </div>
     </header>
 
@@ -59,7 +55,7 @@
     <section class="glass-card">
         <h3 class="section-title">🛠️ Intervenção</h3>
         <label class="field-label">PEÇAS UTILIZADAS</label>
-        <textarea id="pecas" rows="4"></textarea>
+        <textarea id="pecas" rows="3"></textarea>
         <div class="stats-grid mt-15">
             <div class="stat-box">
                 <label>MÃO DE OBRA</label>
@@ -71,30 +67,29 @@
             </div>
         </div>
         <label class="field-label mt-15">RELATÓRIO TÉCNICO</label>
-        <textarea id="relatorio" rows="6"></textarea>
+        <textarea id="relatorio" rows="5"></textarea>
         <div class="input-group mt-15">
             <label>TÉCNICO</label>
             <select id="tecnico">
-                <option>Eurico Mota</option>
-                <option>André Silva</option>
-                <option>Carlos Gomes</option>
+                <option value="Eurico Mota">Eurico Mota</option>
+                <option value="André Silva">André Silva</option>
+                <option value="Carlos Gomes">Carlos Gomes</option>
             </select>
         </div>
     </section>
 
-    <div class="signature-container">
-        <div class="glass-card sig-card">
-            <label>TÉCNICO</label>
-            <canvas id="padTecnico"></canvas>
-            <button class="btn-clear" onclick="limpar('padTecnico')">Limpar</button>
+    <section class="glass-card">
+        <h3 class="section-title">✍️ Validação</h3>
+        <div class="input-group full-width mb-15">
+            <label>NOME DE QUEM ASSINA (RESPONSÁVEL PRESENTE)</label>
+            <input type="text" id="nomeResponsavel" placeholder="Ex: Nome do Gerente ou Funcionário" class="input-destaque">
         </div>
-        <div class="glass-card sig-card">
-            <label>CLIENTE</label>
-            <canvas id="padCliente"></canvas>
-            <button class="btn-clear" onclick="limpar('padCliente')">Limpar</button>
-        </div>
-    </div>
-    <button class="btn-submit" onclick="gerarPDF()">GERAR PDF FINAL</button>
+        <label class="field-label">PAINEL DE ASSINATURA DIGITAL</label>
+        <canvas id="padCliente"></canvas>
+        <button class="btn-clear" onclick="limpar('padCliente')">Limpar Assinatura</button>
+    </section>
+
+    <button class="btn-submit" onclick="gerarPDF()">GERAR RELATÓRIO PDF</button>
 </div>
 <script src="script.js"></script>
 </body>
